@@ -10,7 +10,7 @@ from scipy.linalg import block_diag
 ##
 ##
 ##
-def main( args ):
+def main( args, verbose=1 ):
 
   scan_affine = nib.load( args.input1 ).affine
   scan1 = nib.load( args.input1 ).get_fdata() / args.norm_const
@@ -33,6 +33,9 @@ def main( args ):
 
   diff = diff*diff
 
+  if args.mask_4d is not None:
+    diff = diff[:,:,:,args.mask_4d]
+
   if(len(diff.shape) > 3):
     diff = np.sum(diff,axis=3)
 
@@ -50,7 +53,9 @@ def main( args ):
   if len(scan2.shape) > 3:
     N = N*scan2.shape[3]
   #TODO: outputs?
-  print(np.sum(diff)/(N))
+
+  if verbose > 0:
+    print(np.sum(diff)/(N))
 
   if args.output_list is not None:
     x,y,z = np.where(mask > 0)
@@ -60,14 +65,14 @@ def main( args ):
       output = diff[x,y,z].flatten()
     np.savetxt(args.output_list,output,fmt="%0.6f")
 
-  return
+  return diff
 
 if __name__ == "__main__":
 
   import argparse
 
   parser = argparse.ArgumentParser(description=\
-    "Test Function to Create")
+    "Outputs MSE between [input1] and [input2] to console. Expects 3d or 4d .nii.gz files.")
 
   parser.add_argument("--input1")
   parser.add_argument("--input2")
@@ -75,11 +80,17 @@ if __name__ == "__main__":
   parser.add_argument("--output-diff",default=None)
   parser.add_argument("--output-err",default=None)
   parser.add_argument("--mask")
+  parser.add_argument("--mask-4d", default=None, nargs="+")
   parser.add_argument("--norm-const",default=1,type=float)
+  parser.add_argument("--verbose",default=1,type=int)
+
+  if args.verbose < 1:
+    print("...why do this with [verbose] < 1? Function would print nothing, and is main. Aborting.")
+    exit(1)
 
   args = parser.parse_args()
 
-  main( args )  
+  main( args, verbose=args.verbose )
 
 
 
