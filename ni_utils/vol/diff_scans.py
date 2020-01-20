@@ -84,10 +84,6 @@ if __name__ == "__main__":
   parser.add_argument("--norm-const",default=1,type=float)
   parser.add_argument("--verbose",default=1,type=int)
 
-  if args.verbose < 1:
-    print("...why do this with [verbose] < 1? Function would print nothing, and is main. Aborting.")
-    exit(1)
-
   args = parser.parse_args()
 
   main( args, verbose=args.verbose )
