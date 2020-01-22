@@ -16,11 +16,12 @@ def save_bvals_bvecs( bvals, bvecs, filename_bvals, filename_bvecs ):
     for val in bvals[1:]:
       f.write(" %0.6f" % val)
 
-  for dim in range(3): 
-    with open(filename_bvecs,"w") as f:
+  with open(filename_bvecs,"w") as f:
+    for dim in range(3): 
       f.write("%0.6f" % bvecs[0][dim])
-      for val in bvecs[1:][dim]:
-        f.write(" %0.6f" % val)
+      for val in bvecs[1:]:
+        f.write(" %0.6f" % val[dim])
+      f.write("\n")
 
 def main( args ):
 
