@@ -47,7 +47,6 @@ def main(args, verbose=0):
     if args.four_d_frame is not None:
       scan_block = scan_block[:,:,:,int(args.four_d_frame)]
 
-    
     scan_block /= np.max(scan_block) * args.percent_max_clip
     scan_block = np.clip( scan_block, 0, 1 )
     scan_block *= 255
@@ -65,7 +64,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description=\
-      "Outputs MSE between [input1] and [input2] to console. Expects 3d or 4d .nii.gz files.")
+      "Outputs .gif of .nii.gz file, with reverse scroll")
 
     parser.add_argument("--input")
     parser.add_argument("--output")
