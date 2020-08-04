@@ -51,6 +51,9 @@ def main(args, verbose=0):
     scan_block = np.clip( scan_block, 0, 1 )
     scan_block *= 255
 
+    for axis in args.flip_axis:
+      scan_block = np.flip(scan_block, axis=axis)
+
     if args.reorder is not None:
       scan_block = np.transpose(scan_block, args.reorder)
 
@@ -74,6 +77,7 @@ if __name__ == "__main__":
     parser.add_argument("--verbose",default=1,type=int)
     parser.add_argument("--scale",default=1,type=float)
     parser.add_argument("--percent-max-clip",default=1,type=float)
+    parser.add_argument("--flip-axis",nargs='+', type=int, default=[])
   
     args = parser.parse_args()
   
